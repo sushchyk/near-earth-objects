@@ -1,0 +1,29 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Neo\Domain\Entity\AsteroidEntity" table="asteroid" repository-class="Neo\Infra\Persistence\Doctrine\Repository\AsteroidRepositoryImpl">
+        <options>
+            <option name="charset">utf8mb4</option>
+            <option name="collate">utf8mb4_unicode_ci</option>
+        </options>
+        <indexes>
+            <index columns="is_hazardous"/>
+            <index columns="speed"/>
+<!-- TODO probably we can also create functional index for MONTH(date)/YEAR(date) for /get-best-month endpoint. -->
+<!-- TODO but currently functional indexes break Doctrine migrations: https://github.com/doctrine/dbal/issues/5306 -->
+        </indexes>
+
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO" />
+        </id>
+
+        <field name="name" column="name" type="text" nullable="false"/>
+        <field name="referenceId" type="text" nullable="false"/>
+        <field name="date" column="date" type="date_immutable" nullable="false"/>
+        <field name="speed" type="decimal" scale="3" precision="13" nullable="false"/>
+        <field name="isHazardous" type="boolean" nullable="false" />
+    </entity>
+
+</doctrine-mapping>

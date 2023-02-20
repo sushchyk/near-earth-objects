@@ -1,5 +1,19 @@
-controllers:
-    resource:
-        path: ../src/Controller/
-        namespace: App\Controller
-    type: attribute
+homepage:
+  path: /
+  controller: Neo\Presentation\Controller\Web\HomePageController
+  methods: ['GET']
+
+get_hazardous_asteroids_list:
+  path: /neo/hazardous
+  controller: Neo\Presentation\Controller\Api\GetHazardousAsteroidsController
+  methods: ['GET']
+
+get_fastest_asteroid:
+  path: /neo/fastest
+  controller: Neo\Presentation\Controller\Api\GetFastestAsteroidController
+  methods: ['GET']
+
+get_best_month:
+  path: /neo/best-month
+  controller: Neo\Presentation\Controller\Api\GetBestMonthController
+  methods: ['GET']

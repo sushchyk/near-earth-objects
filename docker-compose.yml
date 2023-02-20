@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  nginx:
+    build:
+      context: ./.docker/nginx
+      dockerfile: ./Dockerfile
+    ports:
+      - "8007:80"
+    networks:
+      - neo
+    volumes:
+      - ./public:/var/www/public
+    container_name: neo-nginx
+
+  php:
+    build:
+      context: .
+      dockerfile: ./.docker/php/Dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+    volumes:
+      - .:/var/www
+    container_name: neo-php
+    networks:
+      - neo
+
+  db:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: neo
+      MYSQL_USER: dbuser
+      MYSQL_PASSWORD: dbpassword
+      MYSQL_ROOT_PASSWORD: root
+    networks:
+      - neo
+    volumes:
+      - neo-db:/var/lib/mysql
+      - ./.docker/mysql/init:/docker-entrypoint-initdb.d
+    container_name: neo-db
+    ports:
+      - "3306:3306"
+
+networks:
+  neo:
+    driver: bridge
+
+volumes:
+  neo-db:
+    driver: local
+
+###> doctrine/doctrine-bundle ###
+  database_data:
+###< doctrine/doctrine-bundle ###
